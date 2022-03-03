@@ -1,5 +1,8 @@
+
 import { TChessmanData, TFaction } from "../types"
-export const gridWidth = 60
+export const width = window.innerWidth;
+export const height = window.innerHeight;
+export const gridWidth = height/14
 export const chessBoardWidthGridNum = 8
 export const chessBoardHeightGridNum = 9
 

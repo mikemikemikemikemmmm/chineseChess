@@ -95,7 +95,7 @@ const factionText = new Konva.Text({
     fontSize: gridWidth * 2 / 3,
     align: 'center',
     verticalAlign: 'middle',
-    fill: strokeColor,
+    // fill: strokeColor,
     y: -gridWidth * 1.5,
     strokeWidth: 2,
 })

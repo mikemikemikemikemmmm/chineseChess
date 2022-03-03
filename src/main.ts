@@ -1,11 +1,9 @@
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Chessman } from "./chessman";
-import { chessBoardHeightGridNum, chessBoardWidthGridNum, gridWidth, startBoard, startX, startY, tolerance } from "./const";
+import { chessBoardHeightGridNum, chessBoardWidthGridNum, gridWidth, startBoard, startX, startY, tolerance,height,width } from "./const";
 import { chessBoardLayer, factionText } from "./chessBoard";
 import { IPosition, TFaction, TBoardData, TXYIndex, TNoChessman } from "./types";
-const width = window.innerWidth;
-const height = window.innerHeight;
 
 class Game {
   nowTurnFaction: TFaction
@@ -33,7 +31,7 @@ class Game {
   }
   setFactionDisplayText(text: string) {
     this.factionText.setText(`現在輪到${text.toUpperCase()}`)
-    this.factionText.setAttr('stroke', text)
+    this.factionText.setAttr('fill', text)
   }
   setStage() {
     const stage = new Konva.Stage({
@@ -174,7 +172,10 @@ class Game {
         event.target.draggable(false)
         return
       }
-      event.target.setZIndex(27)
+      const zIndex = (event.target.parent?.children?.length as number) - 1
+      // console.log(zIndex, 'z')
+      
+      event.target.setZIndex(zIndex)
     })
     chessman.canva.on('dragend', (event) => {
       if (this.nowTurnFaction !== chessman.faction) {
