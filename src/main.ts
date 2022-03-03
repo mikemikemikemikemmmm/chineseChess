@@ -33,7 +33,7 @@ class Game {
   }
   setFactionDisplayText(text: string) {
     this.factionText.setText(`現在輪到${text.toUpperCase()}`)
-    this.factionText.setAttr('stroke',text)
+    this.factionText.setAttr('stroke', text)
   }
   setStage() {
     const stage = new Konva.Stage({
@@ -129,19 +129,19 @@ class Game {
     const endxyIndex = this.getDragendxyIndex(endPosition)
     if (endxyIndex === 'error') {
       this.setChessmanCanvaByIndex(chessman, startIndex)
-      console.log('不合法')
+      // console.log('不合法')
       return
     }
     if (startIndex.x === endxyIndex.x && startIndex.y === endxyIndex.y) {
       this.setChessmanCanvaByIndex(chessman, startIndex)
-      console.log('回原位')
+      // console.log('回原位')
       return
     }
     const selfFaction = this.getFactionByChessman(chessman)
     const testMoveRule = chessman.moveRule(this.boardData, startIndex, endxyIndex, selfFaction)
     if (!testMoveRule) {
       this.setChessmanCanvaByIndex(chessman, startIndex)
-      console.log('不合規則')
+      // console.log('不合規則')
       return
     }
     const endChessman = this.getChessmanByIndex(endxyIndex)
@@ -149,7 +149,7 @@ class Game {
       const endxyFaction = this.getFactionByChessman(endChessman)
       if (endxyFaction === selfFaction) { //same faction
         this.setChessmanCanvaByIndex(chessman, startIndex)
-        console.log('終點是友軍', selfFaction)
+        // console.log('終點是友軍', selfFaction)
         return
       } else if (endxyFaction === this.getEnemyFaction(selfFaction)) { //attack enemy
         endChessman.destorySelfCanva()
