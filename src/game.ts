@@ -173,8 +173,6 @@ export default class Game {
         return
       }
       const zIndex = (event.target.parent?.children?.length as number) - 1
-      // console.log(zIndex, 'z')
-
       event.target.setZIndex(zIndex)
     })
     chessman.canva.on('dragend', (event) => {
@@ -189,11 +187,16 @@ export default class Game {
     })
   }
   transformPositionToIndex(num: number, type: 'x' | 'y'): number | 'error' {
-    let colIndex = Math.floor(num / gridWidth) 
+    /**
+     * to fix float problem for test
+     * ex: 54.1234/54.1234 may not equal 1
+     */
+    const _num = num + 0.00001
+    let colIndex = Math.floor(_num / gridWidth)
     if (colIndex < -1) {
       return 'error'
     }
-    const deviation = Math.abs(num % gridWidth) 
+    const deviation = Math.abs(_num % gridWidth)
     if (colIndex === -1) {
       if (deviation <= tolerance) { //like 0.4 =>0
         return 0
@@ -201,7 +204,7 @@ export default class Game {
         return 'error'
       }
     }
-    if(deviation>=tolerance){//like 1.6
+    if (deviation >= tolerance) {//like 1.6
       colIndex += 1 //1.6=>2
     }
     if (type === 'x' && colIndex > chessBoardWidthGridNum) { //exceed
