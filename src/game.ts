@@ -1,11 +1,11 @@
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Chessman } from "./chessman";
-import { chessBoardHeightGridNum, chessBoardWidthGridNum, gridWidth, startBoard, startX, startY, tolerance,height,width } from "./const";
+import { chessBoardHeightGridNum, chessBoardWidthGridNum, gridWidth, startBoard, startX, startY, tolerance, height, width } from "./const";
 import { chessBoardLayer, factionText } from "./chessBoard";
 import { IPosition, TFaction, TBoardData, TXYIndex, TNoChessman } from "./types";
 
-class Game {
+export default class Game {
   nowTurnFaction: TFaction
   boardData: TBoardData
   stage: Konva.Stage
@@ -35,7 +35,7 @@ class Game {
   }
   setStage() {
     const stage = new Konva.Stage({
-      container: 'container',
+      container: '#container',
       width: width,
       height: height,
     });
@@ -174,7 +174,7 @@ class Game {
       }
       const zIndex = (event.target.parent?.children?.length as number) - 1
       // console.log(zIndex, 'z')
-      
+
       event.target.setZIndex(zIndex)
     })
     chessman.canva.on('dragend', (event) => {
@@ -189,19 +189,20 @@ class Game {
     })
   }
   transformPositionToIndex(num: number, type: 'x' | 'y'): number | 'error' {
-    let colIndex = Math.floor(num / gridWidth)
+    let colIndex = Math.floor(num / gridWidth) 
     if (colIndex < -1) {
       return 'error'
     }
-    const deviation = Math.abs(num % gridWidth)
-    if (colIndex === -1 && (gridWidth - deviation) >= tolerance) {
-      return 0
+    const deviation = Math.abs(num % gridWidth) 
+    if (colIndex === -1) {
+      if (deviation <= tolerance) { //like 0.4 =>0
+        return 0
+      } else { //like 0.6 => error
+        return 'error'
+      }
     }
-    if (deviation <= tolerance) {
-    } else if ((gridWidth - deviation) <= tolerance) {
-      colIndex += 1
-    } else {
-      return 'error'
+    if(deviation>=tolerance){//like 1.6
+      colIndex += 1 //1.6=>2
     }
     if (type === 'x' && colIndex > chessBoardWidthGridNum) { //exceed
       return 'error'
@@ -210,11 +211,7 @@ class Game {
     }
     return colIndex
   }
-  startGame() {
-
-  }
   endGame() {
     alert(`${this.nowTurnFaction}勝利`)
   }
 }
-new Game()

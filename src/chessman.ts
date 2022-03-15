@@ -2,26 +2,26 @@ import Konva from "konva"
 import { factionMap, chessmanDataMap, gridWidth } from "./const"
 import { TKeyFactionMap, TChessmanData, TFaction, TXYIndex, TMoveRule } from "./types"
 export class Chessman {
-    chessmanString: string
-    xyIndex: TXYIndex
-    faction: TFaction
-    categoryData: TChessmanData
-    canva: Konva.Group
+    private chessmanString: string
+    private xyIndex: TXYIndex
+    faction!: TFaction
+    private categoryData!: TChessmanData
+    canva!: Konva.Group
     moveRule: TMoveRule
     constructor(chessmanString: string, xyIndex: TXYIndex) {
         this.chessmanString = chessmanString
         this.xyIndex = xyIndex
-        this.faction = this.setFaction()
-        this.categoryData = this.setChessmanCategoryData()
-        this.canva = this.createCanva()
+        this.setChessmanCategoryData()
         this.moveRule = this.getMoveRule()
+        this.setFaction()
+        this.createCanva()
     }
-    public isKing(){
+    public isKing() {
         return this.chessmanString[1] === '5'
     }
-    private setFaction() {
+    public setFaction() {
         const factionString = this.chessmanString[0] as TKeyFactionMap
-        return factionMap[factionString]
+        this.faction = factionMap[factionString]
     }
     public setXYIndex(xyIndex: TXYIndex) {
         this.xyIndex = xyIndex
@@ -39,7 +39,7 @@ export class Chessman {
     }
     private setChessmanCategoryData() {
         const categoryString = this.chessmanString[1] as string
-        return chessmanDataMap[categoryString]
+        this.categoryData = chessmanDataMap[categoryString]
     }
     public getMoveRule() {
         const moveRule = this.categoryData.moveRule
@@ -76,6 +76,6 @@ export class Chessman {
         })
         group.add(circle)
         group.add(text)
-        return group
+        this.canva =  group
     }
 }

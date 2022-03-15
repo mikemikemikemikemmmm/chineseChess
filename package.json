@@ -5,14 +5,25 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest --detectOpenHandles",
+    "test:cache": "jest",
+    "test:updateSnap": "jest --updateSnapshot",
+    "test:w": "jest --watch"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "@types/jest": "^27.4.1",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.3",
     "typescript": "^4.5.4",
     "vite": "^2.8.0"
   },
   "dependencies": {
-    "konva": "^8.3.3",
-    "rxjs": "^7.5.4"
+    "@babel/preset-typescript": "^7.16.7",
+    "canvas": "^2.9.0",
+    "konva": "^8.3.3"
   }
 }
