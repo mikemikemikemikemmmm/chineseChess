@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.16.7",
-    "canvas": "^2.9.0",
+    "canvas": "^3.2.3",
     "konva": "^8.3.3"
   }
 }
