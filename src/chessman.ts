@@ -66,7 +66,7 @@ export class Chessman {
             radius: gridWidth / 3,
             fill: 'white',
             stroke: this.faction,
-            strokeWidth: 0.5
+            strokeWidth: 1
         })
         const textChar = this.categoryData.text[this.faction]
         const text = new Konva.Text({

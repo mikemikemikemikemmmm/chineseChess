@@ -133,7 +133,7 @@ export default class Game {
       x: xyIndex.x * gridWidth, y: xyIndex.y * gridWidth
     })
   }
-  handleDragEnd(chessman: Chessman, event: KonvaEventObject<MouseEvent, Group>) {
+  handleDragEnd(chessman: Chessman, event: KonvaEventObject<DragEvent, Group>) {
     //test dragEnd is legal
     const startIndex = chessman.getXYIndex()
     const endPosition = event.target.getPosition()
@@ -179,10 +179,10 @@ export default class Game {
     this.changeTurn()
   }
   addChessmanListener(chessman: Chessman) {
-    chessman.canva.on('dragstart', (event) => {
+    chessman.canva.on('dragstart', (event:KonvaEventObject<DragEvent, Group>) => {
       event.target.moveToTop()
     })
-    chessman.canva.on('dragend', (event) => {
+    chessman.canva.on('dragend', (event:KonvaEventObject<DragEvent, Group>) => {
       this.handleDragEnd(chessman, event)
     })
   }
