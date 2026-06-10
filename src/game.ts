@@ -4,6 +4,7 @@ import { Chessman } from "./chessman";
 import { chessBoardHeightGridNum, chessBoardWidthGridNum, gridWidth, startBoard, startX, startY, tolerance, height, width } from "./const";
 import { chessBoardLayer, factionText } from "./chessBoard";
 import { IPosition, TFaction, TBoardData, TXYIndex, TNoChessman } from "./types";
+import { Group } from "konva/lib/Group";
 
 export default class Game {
   nowTurnFaction: TFaction
@@ -12,8 +13,10 @@ export default class Game {
   chessmanLayer: Konva.Layer
   chessBoardLayer: Konva.Layer
   factionText: Konva.Text
+  chessmanGroup: Chessman[]
   constructor() {
     this.nowTurnFaction = 'black'
+    this.chessmanGroup = []
     this.chessmanLayer = new Konva.Layer(
       {
         listening: true,
@@ -28,6 +31,7 @@ export default class Game {
     this.stage.add(chessBoardLayer)
     this.stage.add(this.chessmanLayer)
     this.setFactionDisplayText(this.nowTurnFaction)
+    this.updateDraggable()
   }
   setFactionDisplayText(text: string) {
     this.factionText.setText(`現在輪到${text.toUpperCase()}`)
@@ -48,6 +52,11 @@ export default class Game {
     }
     return this.boardData[xyIndex.y][xyIndex.x]
   }
+  updateDraggable() {
+    this.chessmanGroup.forEach(c =>
+      c.canva.draggable(c.faction === this.nowTurnFaction)
+    )
+  }
   changeTurn() {
     if (this.nowTurnFaction === 'red') {
       this.nowTurnFaction = 'black'
@@ -55,8 +64,10 @@ export default class Game {
       this.nowTurnFaction = 'red'
     }
     this.setFactionDisplayText(this.nowTurnFaction)
+    this.updateDraggable()
   }
   createChessBoard() {
+    const self = this
     const startBoardCopy = startBoard.map((row, rowIndex) => row.map((chessmanString, colIndex) => {
       if (chessmanString === 'no chessman') {
         return 'no chessman'
@@ -64,7 +75,9 @@ export default class Game {
       const xyIndex = {
         y: rowIndex, x: colIndex
       }
-      return this.createChessman(chessmanString, xyIndex)
+      const newChessman = this.createChessman(chessmanString, xyIndex)
+      self.chessmanGroup.push(newChessman)
+      return newChessman
     }))
     return startBoardCopy
   }
@@ -120,7 +133,7 @@ export default class Game {
       x: xyIndex.x * gridWidth, y: xyIndex.y * gridWidth
     })
   }
-  handleDragEnd(chessman: Chessman, event: KonvaEventObject<DragEvent>) {
+  handleDragEnd(chessman: Chessman, event: KonvaEventObject<MouseEvent, Group>) {
     //test dragEnd is legal
     const startIndex = chessman.getXYIndex()
     const endPosition = event.target.getPosition()
@@ -166,24 +179,11 @@ export default class Game {
     this.changeTurn()
   }
   addChessmanListener(chessman: Chessman) {
-    const originZIndex = chessman.canva.getZIndex()
     chessman.canva.on('dragstart', (event) => {
-      if (this.nowTurnFaction !== chessman.faction) {
-        event.target.draggable(false)
-        return
-      }
-      const zIndex = (event.target.parent?.children?.length as number) - 1
-      event.target.setZIndex(zIndex)
+      event.target.moveToTop()
     })
     chessman.canva.on('dragend', (event) => {
-      if (this.nowTurnFaction !== chessman.faction) {
-        event.target.draggable(true)
-        return
-      } else {
-        this.handleDragEnd(chessman, event)
-      }
-      event.target.setZIndex(originZIndex)
-
+      this.handleDragEnd(chessman, event)
     })
   }
   transformPositionToIndex(num: number, type: 'x' | 'y'): number | 'error' {

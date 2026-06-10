@@ -1,6 +1,6 @@
 import Konva from "konva"
 import { startX, startY, gridWidth, chessBoardHeightGridNum, chessBoardWidthGridNum } from "./const"
-const strokeWidth = 4
+const strokeWidth = 0.5
 const strokeColor = 'black'
 const chessBoardLayer = new Konva.Layer({
     listening: false,
@@ -36,8 +36,8 @@ chessBoardLayer.add(new Konva.Text({
     fill: strokeColor,
     x: strokeWidth / 2,
     y: gridWidth * 4 + strokeWidth / 2,
-    strokeWidth: 2,
-    stroke: 'black'
+    // strokeWidth,
+    // stroke: 'black'
 }))
 chessBoardLayer.add(new Konva.Line({
     stroke: strokeColor,

@@ -7,6 +7,7 @@ export class Chessman {
     faction!: TFaction
     private categoryData!: TChessmanData
     canva!: Konva.Group
+    hitbox!: Konva.Rect
     moveRule: TMoveRule
     constructor(chessmanString: string, xyIndex: TXYIndex) {
         this.chessmanString = chessmanString
@@ -58,24 +59,27 @@ export class Chessman {
         const group = new Konva.Group({
             draggable: true,
             x: gridWidth * this.xyIndex.x,
-            y: gridWidth * this.xyIndex.y
+            y: gridWidth * this.xyIndex.y,
+            name: "group",
         })
         const circle = new Konva.Circle({
             radius: gridWidth / 3,
             fill: 'white',
             stroke: this.faction,
-            strokeWidth: 3
+            strokeWidth: 0.5
         })
+        const textChar = this.categoryData.text[this.faction]
         const text = new Konva.Text({
-            text: this.categoryData.text[this.faction],
+            text: textChar,
             fontSize: gridWidth / 2,
             stroke: this.faction,
-            strokeWidth: 2,
+            strokeWidth: 0.1,
             x: -gridWidth / 4,
             y: -gridWidth / 4
         })
+
         group.add(circle)
         group.add(text)
-        this.canva =  group
+        this.canva = group
     }
 }
