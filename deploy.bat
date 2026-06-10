@@ -1,24 +1,27 @@
 @echo off
 setlocal
 
+echo [1/3] Building...
 npm run build
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 (
+    echo Build failed!
+    exit /b %errorlevel%
+)
 
+echo [2/3] Deploying dist to gh-pages...
 cd dist
 
 git init
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-git checkout -b main
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 git add -A
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 git commit -m "deploy"
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-git push -f git@github.com:mikemikemikemikemmmm/chineseChess.git main:gh-pages
-if %errorlevel% neq 0 exit /b %errorlevel%
+git push -f git@github.com:mikemikemikemikemmmm/chineseChess.git HEAD:gh-pages
+if %errorlevel% neq 0 (
+    echo Deploy failed!
+    cd ..
+    exit /b %errorlevel%
+)
 
 cd ..
+
+echo [3/3] Done!
+echo Visit: https://mikemikemikemikemmmm.github.io/chineseChess/
